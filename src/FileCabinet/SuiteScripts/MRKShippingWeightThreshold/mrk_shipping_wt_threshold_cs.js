@@ -7,11 +7,12 @@ define(['./mrk_threshold_helper'], (HELPER) => {
 
     const saveRecord = (context) => {
         try {
-            // check if create event
-            if (context.mode == 'create') {
-            let isValid = HELPER.HELPERS.checkThreshold(context);
-            log.debug('isValid', isValid);
-            return isValid;
+            if(!!context.currentRecord.isNew) {
+                let isValid = HELPER.HELPERS.checkThreshold(context);
+                log.debug('isValid', isValid);
+                return isValid;
+            } else {
+                return true;
             }
         } catch (e) {
             log.error('saveRecord Exception', e.message);

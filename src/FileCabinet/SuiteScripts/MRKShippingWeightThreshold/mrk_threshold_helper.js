@@ -15,9 +15,17 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
         },
         FIELDS: {
             LOC_THRESHOLD_WT: 'custrecord_mrk_threshold_weight',
-            ITEM_WEIGHT: 'custcol2',
+            LOC_THRESHOLD_WT_DUMP: 'custrecord_mrk_dump_threshold_weight',
+            ITEM_WEIGHT: 'custcolcustcol2',
             ON_DEMAND_SHIPDATE: 'custbody_rpod_shipdate',
-            LOCATION: 'location'
+            LOCATION: 'location',
+            DUMP: 'custbody4',
+            ORDER_CLASSIFICATION:'custbody_mrk_order_type'
+        },
+        FLD_VALUES: {
+            ORDER_CLASSIFICATION: {
+                FOR_DELIVERY: '2'
+            }
         },
         MESSAGE: {
             ALERT: {
@@ -37,16 +45,25 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
                 let currentRecord = context.currentRecord;
                 let shipDate = currentRecord.getValue(CONSTANTS.FIELDS.ON_DEMAND_SHIPDATE);
                 let location = currentRecord.getValue(CONSTANTS.FIELDS.LOCATION);
+                let isDumpSO = currentRecord.getValue(CONSTANTS.FIELDS.DUMP) || false;
+                let orderClassification = currentRecord.getValue(CONSTANTS.FIELDS.ORDER_CLASSIFICATION);
+                if (!!shipDate && !!location && !!orderClassification && orderClassification == CONSTANTS.FLD_VALUES.ORDER_CLASSIFICATION.FOR_DELIVERY) {
+                    if (!!isDumpSO) {
+                        // Get the threshold weight of the location
+                        thresholdWeight = HELPERS.getThresholdWeight(location, CONSTANTS.FIELDS.LOC_THRESHOLD_WT_DUMP);
+                        totalSoWt = HELPERS.getSOTotalWt(location, shipDate, isDumpSO); // Get Sum of All dump Orders weight
+                        CONSTANTS.MESSAGE.ALERT.TITLE = 'Dump Trucking Capacity Limit exceeds!';
+                    } else {
+                        // Get the threshold weight of the location
+                        thresholdWeight = HELPERS.getThresholdWeight(location, CONSTANTS.FIELDS.LOC_THRESHOLD_WT);
+                        totalSoWt = HELPERS.getSOTotalWt(location, shipDate, isDumpSO); // Get Sum of All Orders weight
 
-                if (!!shipDate && !!location) {
-                    thresholdWeight = HELPERS.getThresholdWeight(location);     // Get the threshold weight of the location
-                    soWeight = HELPERS.getSOWeight(currentRecord);              // Get the total weight of the current sales order
-                    totalSoWt = HELPERS.getSOTotalWt(location, shipDate);       // Get Sum of All Orders weight
-
+                    }
+                    soWeight = HELPERS.getSOWeight(currentRecord);  // Get the total weight of the current sales order
                     let cumulativeWeight = (Number(totalSoWt) + Number(soWeight));
                     log.debug('Values', `ShipDte: ${shipDate}  Location: ${location} ThresholdWt: ${thresholdWeight} SOWeight: ${soWeight} totalSoWt: ${totalSoWt} CumulativeWt: ${cumulativeWeight}`);
 
-                    if (cumulativeWeight > thresholdWeight) {
+                    if (!!thresholdWeight && thresholdWeight > 0 && (cumulativeWeight > thresholdWeight)) {
                         dialog.alert({
                             title: CONSTANTS.MESSAGE.ALERT.TITLE,
                             message: CONSTANTS.MESSAGE.ALERT.MESSAGE
@@ -85,13 +102,15 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
                 log.error('getSOWeight Exception', e.message + ' ' + e.stack);
             }
         },
-        getSOTotalWt: (location, shipDate) => {
-            try {
+        getSOTotalWt: (location, shipDate, dumpDelivery) => {
+            try { 
                 let totalWeight = 0;
                 const formattedShipDate = format.format({
                     value: new Date(shipDate),
                     type: format.Type.DATE
                 });
+                dumpDelivery = !!dumpDelivery? 'T':'F';
+                log.debug('dumpDelivery', dumpDelivery);
                 let salesOrderSearch = search.create({
                     type: search.Type.SALES_ORDER,
                     filters:
@@ -112,12 +131,14 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
                             "AND",
                             ["cogs", "is", "F"],
                             "AND",
-                            ["location", "anyof", location]
+                            ["location", "anyof", location], 
+                            "AND", 
+                            ["custbody4","is", dumpDelivery]
                         ],
                     columns:
                         [
                             search.createColumn({
-                                name: "custcol2",
+                                name: "custcolcustcol2",
                                 summary: "SUM"
                             })
                         ]
@@ -135,14 +156,14 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
             }
         },
 
-        getThresholdWeight: (location) => {
+        getThresholdWeight: (location, fieldId) => {
             try {
                 let lookupThresholdFld = search.lookupFields({
                     type: search.Type.LOCATION,
                     id: location,
-                    columns: [CONSTANTS.FIELDS.LOC_THRESHOLD_WT]
+                    columns: [fieldId]
                 });
-                let thresholdWeight = lookupThresholdFld[CONSTANTS.FIELDS.LOC_THRESHOLD_WT];
+                let thresholdWeight = lookupThresholdFld[fieldId];
                 return thresholdWeight || 0;
             } catch (e) {
                 log.error('getThresholdWeight Exception', e.message + ' ' + e.stack);
