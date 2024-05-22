@@ -1,0 +1,50 @@
+<transactioncolumncustomfield scriptid="custcol_mrk_item_weight">
+  <accesslevel>2</accesslevel>
+  <applyformatting>T</applyformatting>
+  <colbuild>F</colbuild>
+  <colexpense>F</colexpense>
+  <colexpensereport>F</colexpensereport>
+  <colgrouponinvoices>F</colgrouponinvoices>
+  <colinventoryadjustment>F</colinventoryadjustment>
+  <colitemfulfillment>F</colitemfulfillment>
+  <colitemfulfillmentorder>F</colitemfulfillmentorder>
+  <colitemreceipt>F</colitemreceipt>
+  <colitemreceiptorder>F</colitemreceiptorder>
+  <coljournal>F</coljournal>
+  <colkititem>F</colkititem>
+  <colpackingslip>F</colpackingslip>
+  <colpickingticket>F</colpickingticket>
+  <colprintflag>F</colprintflag>
+  <colpurchase>F</colpurchase>
+  <colreturnform>F</colreturnform>
+  <colsale>T</colsale>
+  <colstorewithgroups>F</colstorewithgroups>
+  <coltransferorder>F</coltransferorder>
+  <defaultchecked>F</defaultchecked>
+  <defaultselection></defaultselection>
+  <defaultvalue>{quantity}*{custcol1}</defaultvalue>
+  <description>This is the transaction line field that is used in the script.&#xd;
+DO NOT EDIT</description>
+  <displayheight></displayheight>
+  <displaytype>NORMAL</displaytype>
+  <displaywidth></displaywidth>
+  <dynamicdefault></dynamicdefault>
+  <encryptatrest>F</encryptatrest>
+  <fieldtype>INTEGER</fieldtype>
+  <help></help>
+  <isformula>T</isformula>
+  <ismandatory>F</ismandatory>
+  <label>MRK | Item Weight</label>
+  <linktext></linktext>
+  <maxlength></maxlength>
+  <maxvalue></maxvalue>
+  <minvalue></minvalue>
+  <onparentdelete></onparentdelete>
+  <searchlevel>2</searchlevel>
+  <selectrecordtype></selectrecordtype>
+  <showhierarchy>F</showhierarchy>
+  <sourcefilterby></sourcefilterby>
+  <sourcefrom></sourcefrom>
+  <sourcelist></sourcelist>
+  <storevalue>F</storevalue>
+</transactioncolumncustomfield>

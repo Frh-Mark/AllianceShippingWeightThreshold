@@ -16,11 +16,11 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
         FIELDS: {
             LOC_THRESHOLD_WT: 'custrecord_mrk_threshold_weight',
             LOC_THRESHOLD_WT_DUMP: 'custrecord_mrk_dump_threshold_weight',
-            ITEM_WEIGHT: 'custcolcustcol2',
+            ITEM_WEIGHT: 'formulanumeric',
             ON_DEMAND_SHIPDATE: 'custbody_rpod_shipdate',
             LOCATION: 'location',
             DUMP: 'custbody4',
-            ORDER_CLASSIFICATION:'custbody_mrk_order_type'
+            ORDER_CLASSIFICATION: 'custbody_mrk_order_type'
         },
         FLD_VALUES: {
             ORDER_CLASSIFICATION: {
@@ -61,7 +61,7 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
                     }
                     soWeight = HELPERS.getSOWeight(currentRecord);  // Get the total weight of the current sales order
                     let cumulativeWeight = (Number(totalSoWt) + Number(soWeight));
-                    log.debug('Values', `ShipDte: ${shipDate}  Location: ${location} ThresholdWt: ${thresholdWeight} SOWeight: ${soWeight} totalSoWt: ${totalSoWt} CumulativeWt: ${cumulativeWeight}`);
+                    log.debug('Values', `ShipDate: ${shipDate}  Location: ${location} ThresholdWt: ${thresholdWeight} SOWeight: ${soWeight} totalSoWt: ${totalSoWt} CumulativeWt: ${cumulativeWeight}`);
 
                     if (!!thresholdWeight && thresholdWeight > 0 && (cumulativeWeight > thresholdWeight)) {
                         dialog.alert({
@@ -103,13 +103,13 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
             }
         },
         getSOTotalWt: (location, shipDate, dumpDelivery) => {
-            try { 
+            try {
                 let totalWeight = 0;
                 const formattedShipDate = format.format({
                     value: new Date(shipDate),
                     type: format.Type.DATE
                 });
-                dumpDelivery = !!dumpDelivery? 'T':'F';
+                dumpDelivery = !!dumpDelivery ? 'T' : 'F';
                 log.debug('dumpDelivery', dumpDelivery);
                 let salesOrderSearch = search.create({
                     type: search.Type.SALES_ORDER,
@@ -131,15 +131,16 @@ define(['N/record', 'N/search', 'N/log', 'N/format', 'N/ui/dialog'], (record, se
                             "AND",
                             ["cogs", "is", "F"],
                             "AND",
-                            ["location", "anyof", location], 
-                            "AND", 
-                            ["custbody4","is", dumpDelivery]
+                            ["location", "anyof", location],
+                            "AND",
+                            ["custbody4", "is", dumpDelivery]
                         ],
                     columns:
                         [
                             search.createColumn({
-                                name: "custcolcustcol2",
-                                summary: "SUM"
+                                name: "formulanumeric",
+                                summary: "SUM",
+                                formula: "NVL(({quantityuom}*{custcol1}),0)"
                             })
                         ]
                 });
