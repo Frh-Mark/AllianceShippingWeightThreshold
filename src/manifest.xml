@@ -12,62 +12,11 @@
       <feature required="false">WORKORDERS</feature>
     </features>
     <objects>
-      <object>custbody_11187_pref_entity_bank</object>
-      <object>custbody_rpod_customer_comments</object>
-      <object>custbody_11724_pay_bank_fees</object>
       <object>custbody_rpod_shipdate</object>
       <object>custbody3</object>
-      <object>custbody_rpod_photo_file</object>
       <object>custbody4</object>
-      <object>custbody_15889_cust_refund_entity_bank</object>
-      <object>custbody_15529_emp_entity_bank</object>
       <object>custbody_mrk_order_type</object>
-      <object>custbody_rpod_customername</object>
-      <object>custbody_15699_exclude_from_ep_process</object>
       <object>customlist_mrk_order_type</object>
-      <object>custbody_15529_vendor_entity_bank</object>
-      <object>customrecord_2663_entity_bank_details</object>
-      <object>custbody_rpod_signature_file</object>
-      <object>custbody_netsdr_generate_lat_long</object>
-      <object>custbody_11724_bank_fee</object>
-      <object>custbody_10184_customer_entity_bank</object>
     </objects>
-    <applications>
-      <application id="com.netscoretech.netscoredr">
-        <objects>
-          <object>custbody_dr_image4</object>
-          <object>custbody_is_email_sent</object>
-          <object>custbody_delivery_routing_reason_notes</object>
-          <object>custbody_dr_image5</object>
-          <object>custbody_dr_image6</object>
-          <object>custbody_dr_nondeliveryreason</object>
-          <object>custbody_dr_assignedto</object>
-          <object>customlist_wms_delivery_status</object>
-          <object>customrecord_load_planning_lines</object>
-          <object>customlist_dr_reason_codes</object>
-          <object>custbody_is_sms_sent</object>
-          <object>custbody_delivery_stop_no</object>
-          <object>custbody_dr_customer_sign</object>
-          <object>custbody_dr_longitude</object>
-          <object>customrecord_delivery_planning</object>
-          <object>custbody_dr_deliveredby</object>
-          <object>custbody_dr_deliveryremarks</object>
-          <object>custbody_is_packingslip_sent</object>
-          <object>custbody_is_invoice_sent</object>
-          <object>custbody_dr_deliverystatus</object>
-          <object>custbody_dr_relatedlp</object>
-          <object>custbody_dr_assy_dept</object>
-          <object>custbody_dr_deliveredto</object>
-          <object>custbody_related_clildid</object>
-          <object>custbody_dr_deliverytime</object>
-          <object>custbody_delivery_routing_reason_code</object>
-          <object>custbody_dr_machine_shop</object>
-          <object>custbody_dr_latitude</object>
-          <object>custbody_dr_image1</object>
-          <object>custbody_dr_image2</object>
-          <object>custbody_dr_image3</object>
-        </objects>
-      </application>
-    </applications>
   </dependencies>
 </manifest>
